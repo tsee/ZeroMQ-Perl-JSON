@@ -6,8 +6,8 @@ WriteMakefile(
     NAME              => 'ZeroMQ::JSON',
     VERSION_FROM      => 'lib/ZeroMQ/JSON.pm',
     PREREQ_PM         => {
-      'ZeroMQ' => '0.01',
-      'JSON::Any' => '0',
+      'ZeroMQ'    => '0.01',
+      'JSON::Any' => '1.22',
     },
     ($] >= 5.005 ?
       (ABSTRACT_FROM  => 'lib/ZeroMQ/JSON.pm', # retrieve abstract from module
