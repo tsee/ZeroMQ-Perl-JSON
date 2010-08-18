@@ -2,8 +2,7 @@ package ZeroMQ::JSON;
 use 5.008;
 use strict;
 use ZeroMQ ();
-#use Params::Util '_INSTANCE';
-use JSON::Any ();
+use JSON::Any;
 
 our $VERSION = '0.01';
 
@@ -27,20 +26,13 @@ our @ISA = qw(ZeroMQ::Socket);
 sub send {
   my $self = shift;
   my $msg = shift;
-  my $msgobj;
-#  if (_INSTANCE($msg, 'ZeroMQ::Message')) {
-#    $msgobj = $msg;
-#  }
-#  else {
-    $msgobj = ZeroMQ::Message->new(JSON::Any->objToJson($msg));
-#  }
-  return $self->SUPER::send($msgobj);
+  return $self->SUPER::send(JSON::Any->objToJson($msg));
 }
 
 sub recv {
   my $self = shift;
-  my $msgobj = $self->SUPER::recv();
-  return ZeroMQ::Message->new(JSON::Any->jsonToObj($msgobj));
+  my $msgobj = $self->SUPER::recv;
+  return ZeroMQ::Message->new(JSON::Any->jsonToObj($msgobj->data));
 }
 
 1;
@@ -81,7 +73,8 @@ C<ZeroMQ::Socket> via the C<new> constructor or using the C<json_socket(...)>
 method of C<ZeroMQ::Context>.
 
 The C<send()> and C<recv()> methods have been overridden to respectively
-send or return a Perl data structure (that can be serialized as JSON)
+send or return a Perl data structure (that can be serialized as JSON,
+so a hash or array reference will be fine)
 instead of a C<ZeroMQ::Message> object that is normally used.
 
 This makes it trivially easy to exchange data with programs written
